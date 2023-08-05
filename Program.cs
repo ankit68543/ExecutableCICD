@@ -11,7 +11,7 @@ namespace ExecutableCICD
                 Console.WriteLine("Hello World => " + i);
             }
 
-            Environment.Exit(1);
+            Environment.Exit(0);
         }
     }
 }
