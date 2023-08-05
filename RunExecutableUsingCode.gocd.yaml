@@ -1,28 +1,34 @@
-﻿# Pipeline Configuration
-format_version: 1
-
+﻿format_version: 10
 pipelines:
-  my_dotnet_app:
+  RunExecutableUsingCode.gocd:
+    group: defaultGroup
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: -1
     materials:
-      - git: https://github.com/ankit68543/ExecutableCICD.git
-
+      git-da00413:
+        git: https://github.com/ankit68543/ExecutableCICD.git
+        shallow_clone: false
+        auto_update: true
+        branch: master
     stages:
-      - name: Build
+    - Build:
+        fetch_materials: true
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+          allow_only_on_success: false
         jobs:
-          - name: Build
+          build:
+            timeout: 0
             tasks:
-              - exec:
+            - exec:
                   command: dotnet
                   args: ["build", "ExecutableCICD/ExecutableCICD.csproj"]
+                  run_if: passed
               - exec:
                   command: dotnet
                   args: ["publish", "ExecutableCICD/ExecutableCICD.csproj"]
-
-      - name: Run
-        jobs:
-          - name: Run
-            tasks:
-              - exec:
-                  command: ExecutableCICD/LatestBuild/net5.0/ExecutableCICD.exe
-
-    # Additional configuration like environment variables, agent labels, etc.
+                  run_if: passed
+                
