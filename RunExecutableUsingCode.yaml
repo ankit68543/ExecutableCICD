@@ -1,0 +1,28 @@
+﻿# Pipeline Configuration
+format_version: 1
+
+pipelines:
+  my_dotnet_app:
+    materials:
+      - git: https://github.com/ankit68543/ExecutableCICD.git
+
+    stages:
+      - name: Build
+        jobs:
+          - name: Build
+            tasks:
+              - exec:
+                  command: dotnet
+                  args: ["build", "ExecutableCICD/ExecutableCICD.csproj"]
+              - exec:
+                  command: dotnet
+                  args: ["publish", "ExecutableCICD/ExecutableCICD.csproj"]
+
+      - name: Run
+        jobs:
+          - name: Run
+            tasks:
+              - exec:
+                  command: ExecutableCICD/LatestBuild/net5.0/ExecutableCICD.exe
+
+    # Additional configuration like environment variables, agent labels, etc.
